@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const sectionSelecao = document.getElementById("section-selecao");
   const sectionConfirmacao = document.getElementById("section-confirmacao");
   const tabelaCorpo = document.getElementById("tabela-corpo");
-  const tabelaConfirmacao = document.getElementById("tabela-confirmacao"); // Adicionado para html2canvas
+  const tabelaConfirmacao = document.getElementById("tabela-confirmacao");
 
   // Botões
   const btnPrevMonth = document.getElementById("prev-month");
@@ -17,10 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnVoltar = document.getElementById("btn-voltar");
   const btnAvancar = document.getElementById("btn-avancar");
   const btnEditar = document.getElementById("btn-editar");
-  const btnRepetirAulas = document.getElementById("btn-repetir-aulas"); // Novo botão
-  const btnEnviarCronograma = document.getElementById("btn-enviar-cronograma"); // Renomeado
-  const btnBaixarCronograma = document.getElementById("btn-baixar-cronograma"); // Novo botão
+  const btnRepetirAulas = document.getElementById("btn-repetir-aulas");
+  const btnEnviarCronograma = document.getElementById("btn-enviar-cronograma");
+  const btnBaixarCronograma = document.getElementById("btn-baixar-cronograma");
 
+  // Variáveis de estado
   let selectedDays = [];
   let contadorAulas = 1;
   const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -39,6 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const lastDay = new Date(year, month + 1, 0).getDay();
 
     calendarDays.innerHTML = "";
+    
+    // Dias vazios para alinhar o primeiro dia do mês
     for (let i = 0; i < firstDay; i++) {
       calendarDays.appendChild(document.createElement("div"));
     }
@@ -46,18 +49,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
 
+    // Dias do mês
     for (let day = 1; day <= totalDays; day++) {
       const dayDiv = document.createElement("div");
       dayDiv.textContent = day;
       const dateKey = `${day}/${month + 1}/${year}`;
       const currentDate = new Date(year, month, day);
-      currentDate.setHours(0, 0, 0, 0); // Zera a hora para comparação correta
+      currentDate.setHours(0, 0, 0, 0);
 
       const isPastDay = currentDate < hoje;
 
       if (isPastDay) dayDiv.classList.add("past-day");
       if (selectedDays.includes(dateKey)) dayDiv.classList.add("selected-day");
-      // Verifica se é o dia atual, mas apenas se não for um dia passado
+      
+      // Destacar dia atual se não for passado
       if (day === hoje.getDate() && month === hoje.getMonth() && year === hoje.getFullYear() && !isPastDay) {
         dayDiv.classList.add("today");
       }
@@ -75,14 +80,15 @@ document.addEventListener("DOMContentLoaded", () => {
       calendarDays.appendChild(dayDiv);
     }
 
-    // Preenche os dias restantes da última semana para completar o grid
+    // Preencher dias restantes da última semana
     const totalCells = firstDay + totalDays;
-    const remainingCells = (7 - (totalCells % 7)) % 7; // Calcula quantos divs vazios faltam para completar a última linha
+    const remainingCells = (7 - (totalCells % 7)) % 7;
     for (let i = 0; i < remainingCells; i++) {
       calendarDays.appendChild(document.createElement("div"));
     }
   }
 
+  // Inicializar calendário
   renderCalendar(dataAtual);
 
   // ==============================
@@ -143,24 +149,37 @@ document.addEventListener("DOMContentLoaded", () => {
       <button class="delete-btn">Deletar</button>
     `;
 
+    // Evento para deletar card
     card.querySelector('.delete-btn').addEventListener('click', () => {
       selectedDays = selectedDays.filter(day => day !== dateKey);
       renderCalendar(dataAtual);
-      gsap.to(card, { opacity: 0, y: -20, duration: 0.3, onComplete: () => {
-        card.remove();
-        atualizarTotalHoras();
-        // Reajusta o contador de aulas se necessário, ou apenas deixa ele crescer
-        // Se precisar reordenar os números das aulas, uma função adicional seria necessária aqui
-      }});
+      gsap.to(card, { 
+        opacity: 0, 
+        y: -20, 
+        duration: 0.3, 
+        onComplete: () => {
+          card.remove();
+          atualizarTotalHoras();
+        }
+      });
     });
 
+    // Atualizar total de horas quando mudar duração
     card.querySelector('.select-duracao').addEventListener('change', atualizarTotalHoras);
+    
     selectionContainer.appendChild(card);
 
-    gsap.fromTo(card, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 });
+    // Animação de entrada
+    gsap.fromTo(card, { opacity: 0, y: 20 }, { 
+      opacity: 1, 
+      y: 0, 
+      duration: 0.4 
+    });
+
     contadorAulas++;
     atualizarTotalHoras();
 
+    // Scroll para o novo card
     selectionContainer.scrollTo({
       top: selectionContainer.scrollHeight,
       behavior: 'smooth'
@@ -202,10 +221,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // Evento: Avançar (Ir para Confirmação)
   // ==============================
   btnAvancar.addEventListener("click", () => {
+    // Verifica se há aulas selecionadas
+    if (selectedDays.length === 0) {
+      alert("Por favor, selecione pelo menos um dia de aula antes de avançar.");
+      return;
+    }
+    
     gerarTabelaConfirmacao();
     sectionSelecao.style.display = "none";
     sectionConfirmacao.style.display = "block";
     gsap.fromTo(sectionConfirmacao, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+    
+    // Scroll para o topo da seção de confirmação
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
   // ==============================
@@ -215,16 +243,17 @@ document.addEventListener("DOMContentLoaded", () => {
     sectionConfirmacao.style.display = "none";
     sectionSelecao.style.display = "block";
     animarEntradaSelecao();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
   // ==============================
   // Geração da Tabela de Confirmação
   // ==============================
   function gerarTabelaConfirmacao() {
-    tabelaCorpo.innerHTML = ""; // Limpa a tabela
-    const cards = document.querySelectorAll(".selection-card"); // Seleciona todos os cards
+    tabelaCorpo.innerHTML = "";
+    const cards = document.querySelectorAll(".selection-card");
+    
     cards.forEach(card => {
-      // Captura a data formatada diretamente do texto do strong com "Data:"
       const dataText = card.querySelector("strong:nth-child(2)").nextSibling.textContent.trim();
       const horario = card.querySelector(".input-time").value || "Não informado";
       const duracao = card.querySelector(".select-duracao").value || "Não selecionado";
@@ -243,7 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==============================
-  // Novo Botão: Repetir mesma matéria e horários
+  // Botão: Repetir mesma matéria e horários
   // ==============================
   btnRepetirAulas.addEventListener("click", () => {
     const allCards = document.querySelectorAll(".selection-card");
@@ -264,64 +293,103 @@ document.addEventListener("DOMContentLoaded", () => {
       const currentDurationSelect = currentCard.querySelector(".select-duracao");
       const currentMateriaSelect = currentCard.querySelector(".select-materia");
 
-      // Preenche Horário se estiver vazio
+      // Preenche apenas campos vazios
       if (!currentTimeInput.value && firstCardTime) {
         currentTimeInput.value = firstCardTime;
       }
-      // Preenche Duração se estiver vazio
+      
       if (!currentDurationSelect.value && firstCardDuration) {
         currentDurationSelect.value = firstCardDuration;
-        atualizarTotalHoras(); // Atualiza o total de horas após preencher
       }
-      // Preenche Matéria se estiver vazio
+      
       if (!currentMateriaSelect.value && firstCardMateria) {
         currentMateriaSelect.value = firstCardMateria;
       }
     }
+
+    // Atualiza o total de horas após preencher durações
+    atualizarTotalHoras();
+    
+    // Feedback visual
+    gsap.fromTo(btnRepetirAulas, 
+      { backgroundColor: '#f28705' }, 
+      { 
+        backgroundColor: '#4CAF50', 
+        duration: 0.3,
+        onComplete: () => {
+          gsap.to(btnRepetirAulas, { 
+            backgroundColor: '#f28705', 
+            delay: 0.5,
+            duration: 0.3 
+          });
+        }
+      }
+    );
   });
 
   // ==============================
   // Botão: Enviar Cronograma (Compartilhar via WhatsApp)
   // ==============================
   btnEnviarCronograma.addEventListener("click", async () => {
-    const message = encodeURIComponent("Olá Masters! Elaborei este cronograma de aulas! Fico no aguardo da confirmação da equipe!");
-
     try {
-      // Captura a tabela como imagem
+      // Mostrar loading
+      btnEnviarCronograma.textContent = "Gerando imagem...";
+      btnEnviarCronograma.disabled = true;
+
+      // Capturar a tabela como imagem
       const canvas = await html2canvas(tabelaConfirmacao, {
-        scale: 2, // Aumenta a escala para melhor qualidade
-        useCORS: true // Necessário se houver imagens externas na tabela
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        scrollY: -window.scrollY,
+        backgroundColor: '#f9f9f9'
       });
-      const imageData = canvas.toDataURL('image/png'); // Obtém a imagem em base64
 
-      // Tenta usar a Web Share API (melhor para mobile)
-      if (navigator.share && navigator.canShare({ files: [] })) { // Verifica se pode compartilhar arquivos
-        const blob = await (await fetch(imageData)).blob();
-        const file = new File([blob], "cronograma_aulas.png", { type: "image/png" });
-
+      // Converter para blob
+      canvas.toBlob(async (blob) => {
         try {
-          await navigator.share({
-            files: [file],
-            title: 'Cronograma de Aulas',
-            text: decodeURIComponent(message)
-          });
-          console.log('Conteúdo compartilhado com sucesso!');
+          const file = new File([blob], "cronograma_aulas.png", { type: "image/png" });
+          const shareData = {
+            title: "Cronograma de Aulas",
+            text: "Olá Masters! Elaborei este cronograma de aulas! Fico no aguardo da confirmação da equipe!",
+            files: [file]
+          };
+
+          // Tentar usar Web Share API (mobile)
+          if (navigator.share && navigator.canShare(shareData)) {
+            await navigator.share(shareData);
+          } 
+          // Fallback para WhatsApp Web
+          else if (navigator.userAgent.includes("WhatsApp")) {
+            const formData = new FormData();
+            formData.append('file', file);
+            // Aqui você precisaria de um backend para enviar a imagem
+            alert("Por favor, anexe a imagem manualmente no WhatsApp.");
+          }
+          // Fallback genérico
+          else {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'cronograma_aulas.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert("Cronograma baixado! Por favor, envie a imagem manualmente pelo WhatsApp.");
+          }
         } catch (error) {
-          console.error('Erro ao compartilhar via Web Share API:', error);
-          // Fallback para WhatsApp URL se Web Share falhar
-          window.open(`https://wa.me/?text=${message}`, '_blank');
+          console.error("Erro ao compartilhar:", error);
+          alert("Houve um erro ao compartilhar. Você pode baixar a imagem e enviar manualmente.");
+        } finally {
+          btnEnviarCronograma.textContent = "Enviar Cronograma";
+          btnEnviarCronograma.disabled = false;
         }
-      } else {
-        // Fallback para WhatsApp URL (não permite anexar imagem diretamente, apenas texto)
-        // Para compartilhar imagem, o usuário precisaria anexar manualmente.
-        // Uma alternativa seria um serviço de upload de imagem e compartilhar o link.
-        // Por simplicidade, aqui apenas abre o WhatsApp com a mensagem.
-        window.open(`https://wa.me/?text=${message}`, '_blank');
-        alert("Houve um erro ao compartilhar a imagem diretamente. O WhatsApp foi aberto com a mensagem. Por favor, anexe a imagem manualmente.");
-      }
+      }, 'image/png');
     } catch (error) {
-      console.error("Erro ao gerar ou compartilhar a imagem:", error);
-      alert("Houve um erro ao compartilhar a imagem.");
+      console.error("Erro ao gerar imagem:", error);
+      alert("Houve um erro ao gerar a imagem do cronograma.");
+      btnEnviarCronograma.textContent = "Enviar Cronograma";
+      btnEnviarCronograma.disabled = false;
     }
   });
 
@@ -330,14 +398,17 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==============================
   btnBaixarCronograma.addEventListener("click", async () => {
     try {
+      btnBaixarCronograma.textContent = "Preparando download...";
+      btnBaixarCronograma.disabled = true;
+
       const canvas = await html2canvas(tabelaConfirmacao, {
-        scale: 2, // Aumenta a escala para melhor qualidade
-        useCORS: true
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#f9f9f9'
       });
-      const imageData = canvas.toDataURL('image/png');
 
       const link = document.createElement('a');
-      link.href = imageData;
+      link.href = canvas.toDataURL('image/png');
       link.download = 'cronograma_aulas.png';
       document.body.appendChild(link);
       link.click();
@@ -345,6 +416,17 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       console.error("Erro ao baixar a imagem:", error);
       alert("Houve um erro ao baixar a imagem.");
+    } finally {
+      btnBaixarCronograma.textContent = "Baixar Cronograma";
+      btnBaixarCronograma.disabled = false;
     }
+  });
+
+  // ==============================
+  // Ajustes de redimensionamento
+  // ==============================
+  window.addEventListener('resize', () => {
+    // Forçar rerender do calendário em resize
+    renderCalendar(dataAtual);
   });
 });

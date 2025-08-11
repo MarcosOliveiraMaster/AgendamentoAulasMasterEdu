@@ -1,5 +1,10 @@
 /* ============================================================
    CSS - Projeto: Calendário, Seleção e Confirmação de Aulas
+   Versão: 2.0
+   Atualizações: 
+   - Melhorias de responsividade mobile
+   - Ajustes para compartilhamento no WhatsApp
+   - Botões fixos otimizados
    ============================================================ */
 
 /* Definindo variáveis CSS para cores, tamanhos e outros */
@@ -12,6 +17,7 @@
   --radius: 16px !important;
   --day-circle-size: 70px !important;
   --section-height: 70vh !important;
+  --mobile-header-height: 60px !important;
 }
 
 /* Resetando margens, paddings e configurando box-sizing */
@@ -32,7 +38,7 @@ body {
   justify-content: center !important;
   align-items: center !important;
   padding: 20px !important;
-  position: relative !important; /* Contexto para posicionamento fixo */
+  position: relative !important;
 }
 
 /* Estilizando o título principal */
@@ -40,13 +46,14 @@ h1 {
   margin-bottom: 20px !important;
   color: var(--primary-color) !important;
   text-align: center !important;
+  font-size: 1.5rem !important;
 }
 
 /* Configurando a seção principal */
 .section-page {
   width: 100% !important;
   max-width: 1000px !important;
-  margin-bottom: 100px !important; /* Espaço para botões fixos */
+  margin-bottom: 100px !important;
 }
 
 /* Layout principal com flexbox */
@@ -108,6 +115,14 @@ h1 {
   font-size: 1.2rem !important;
   margin-bottom: 12px !important;
   color: var(--primary-color) !important;
+}
+
+/* Mensagem abaixo do título */
+.selection-section p {
+  font-size: 0.85rem !important;
+  color: #666 !important;
+  margin-top: 8px !important;
+  margin-bottom: 12px !important;
 }
 
 /* Container dos cards de seleção com scroll */
@@ -298,19 +313,21 @@ h1 {
   gap: 10px !important;
   z-index: 1000 !important;
   padding: 0 20px !important;
+  background-color: var(--bg-color) !important;
 }
 
 /* Ajustando a seção de confirmação para alinhar botões na base */
 #section-confirmacao {
   position: relative !important;
-  min-height: calc(100vh - 120px) !important; /* Garante espaço suficiente */
-  padding-bottom: 100px !important; /* Ajuste para empurrar conteúdo acima dos botões fixos */
-  margin-bottom: 0 !important; /* Remove margem extra */
+  min-height: calc(100vh - 120px) !important;
+  padding-bottom: 100px !important;
+  margin-bottom: 0 !important;
 }
 
 /* Ajuste para que os botões de confirmação também fiquem fixos no rodapé */
 #footer-buttons-confirmacao {
-  bottom: 20px !important; /* Ajustado para o mesmo valor dos outros botões fixos */
+  bottom: 20px !important;
+  flex-wrap: wrap !important;
 }
 
 /* Estilizando todos os botões fixos */
@@ -324,6 +341,7 @@ h1 {
   border: 2px solid var(--primary-color) !important;
   font-size: 0.9rem !important;
   transition: all 0.3s !important;
+  min-width: 120px !important;
 }
 
 /* Estilizando botões Voltar e Editar */
@@ -341,7 +359,7 @@ h1 {
 
 /* Estilizando botões Avançar e Enviar Cronograma */
 #btn-avancar,
-#btn-enviar-cronograma { /* Alterado de #btn-avancar-confirmacao para #btn-enviar-cronograma */
+#btn-enviar-cronograma {
   background-color: var(--primary-color) !important;
   color: white !important;
   border: none !important;
@@ -349,7 +367,7 @@ h1 {
 
 /* Hover nos botões Avançar e Enviar Cronograma */
 #btn-avancar:hover,
-#btn-enviar-cronograma:hover { /* Alterado de #btn-avancar-confirmacao para #btn-enviar-cronograma */
+#btn-enviar-cronograma:hover {
   background-color: #e07d04 !important;
 }
 
@@ -358,7 +376,7 @@ h1 {
   width: 100% !important;
   overflow-x: auto !important;
   margin-top: 20px !important;
-  margin-bottom: 80px !important; /* Espaço para os botões fixos */
+  margin-bottom: 80px !important;
 }
 
 /* Estilizando a tabela de confirmação */
@@ -394,17 +412,23 @@ h1 {
   font-weight: bold !important;
 }
 
-/* Responsividade para dispositivos menores */
+/* ============================================================
+   RESPONSIVIDADE PARA MOBILE
+   ============================================================ */
 @media (max-width: 768px) {
   body {
-    padding: 15px !important;
+    padding: 15px 15px 100px 15px !important;
     justify-content: flex-start !important;
-    padding-bottom: 100px !important; /* Mantém espaço para botões fixos */
+  }
+
+  h1 {
+    font-size: 1.3rem !important;
+    margin-bottom: 15px !important;
   }
 
   .main-container {
     flex-direction: column !important;
-    width: 90% !important;
+    width: 100% !important;
     gap: 15px !important;
   }
 
@@ -412,40 +436,95 @@ h1 {
   .right-container {
     flex: 1 1 100% !important;
     width: 100% !important;
-    /* Removido height: auto para permitir max-height */
+    height: auto !important;
   }
 
-  /* Ajuste para o calendário em mobile */
   .calendar-section {
-    max-height: 40vh !important; /* Ocupa 40% da altura da tela vertical */
-    overflow-y: auto !important; /* Permite rolagem se o conteúdo exceder */
+    max-height: 40vh !important;
+    overflow-y: auto !important;
+    margin-bottom: 15px !important;
   }
 
-  /* Botões fixos no rodapé em mobile */
+  .right-container {
+    flex: 1 !important;
+    min-height: 50vh !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .selection-section {
+    flex: 1 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #selection-cards-container {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
   .footer-buttons,
   #footer-buttons-confirmacao {
-    position: fixed !important; /* Mantém fixo */
-    bottom: 20px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 100% !important;
-    max-width: 100% !important; /* Ocupa toda a largura disponível */
-    margin-top: 0 !important; /* Remove margem superior */
-    background-color: transparent !important; /* Fundo transparente */
-    box-shadow: none !important; /* Sem sombra */
-    padding: 0 15px !important; /* Ajusta padding para mobile */
+    position: fixed !important;
+    bottom: 10px !important;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    padding: 0 10px !important;
+    background-color: var(--bg-color) !important;
+    z-index: 1000 !important;
+    max-width: 100% !important;
+  }
+
+  .footer-buttons button,
+  #footer-buttons-confirmacao button {
+    padding: 10px !important;
+    font-size: 0.8rem !important;
+    min-width: auto !important;
+  }
+
+  #footer-buttons-confirmacao {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  #btn-baixar-cronograma {
+    margin-top: 0 !important;
+    order: 3 !important;
   }
 
   #section-confirmacao {
     min-height: auto !important;
-    padding-bottom: 0 !important;
+    padding-bottom: 120px !important;
+  }
+
+  .table-container {
+    margin-bottom: 20px !important;
   }
 
   .section-page {
     margin-bottom: 20px !important;
   }
+}
 
-  .table-container {
-    margin-bottom: 20px !important;
+/* Melhorias para telas muito pequenas */
+@media (max-width: 480px) {
+  .calendar-days div {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 1.2rem !important;
+  }
+
+  .selection-card {
+    padding: 10px 12px !important;
+  }
+
+  .footer-buttons button,
+  #footer-buttons-confirmacao button {
+    font-size: 0.75rem !important;
+    padding: 8px !important;
   }
 }
