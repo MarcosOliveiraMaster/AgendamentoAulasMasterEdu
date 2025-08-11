@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="contratacao.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <!-- Adicionado html2canvas para capturar a tabela como imagem -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
@@ -43,7 +42,6 @@
           <h2>Seleções de Aula</h2>
           <div id="selection-cards-container"></div>
           <p>Para adicionar mais uma aula, clique em uma nova data no calendário</p>
-          <!-- Novo botão para repetir aulas -->
           <button id="btn-repetir-aulas" class="action-btn">Repetir informações para as próximas aulas</button>
         </div>
       </div>
@@ -83,12 +81,37 @@
     <!-- Botões Rodapé - Confirmação -->
     <div class="footer-buttons" id="footer-buttons-confirmacao">
       <button id="btn-editar">Editar dias de aula</button>
-      <!-- Botão "Avançar" renomeado para "Enviar Cronograma" -->
       <button id="btn-enviar-cronograma">Enviar Cronograma</button>
-      <!-- Novo botão para baixar a tabela como imagem -->
-      <!-- <button id="btn-baixar-cronograma" class="action-btn">Baixar Cronograma</button> -->
     </div>
   </section>
+
+  <!-- Popup de Confirmação para Repetir Aulas -->
+  <div id="popup-repetir" class="popup-overlay">
+    <div class="popup-container">
+      <div class="popup-content">
+        <br><br>
+        <p><strong>📋 Copiar Informações para as Próximas Aulas</strong></p><br><br>
+
+        <p>
+        Caso queira <strong>repetir</strong> automaticamente as informações de <strong>disciplina</strong>, <strong>hora de início</strong> e <strong>duração</strong> para as próximas aulas, clique em <strong>Avançar</strong>.
+        </p><br><br>
+
+        <p>
+        Para copiar as informações da primeira aula, marque as próximas aulas e<br> deixe os campos em branco 
+        
+        </p>
+        <br><br>
+
+
+      </div>
+      <div class="popup-buttons">
+        <button id="popup-voltar" class="popup-btn popup-btn-voltar">Voltar</button>
+        <button id="popup-avancar" class="popup-btn popup-btn-avancar">Avançar</button>
+        <div class="popup-spacer"></div> <!-- Nova div para espaçamento -->
+        
+      </div>
+    </div>
+  </div>
 
   <script src="contratacao.js"></script>
 </body>

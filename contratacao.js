@@ -10,6 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const sectionConfirmacao = document.getElementById("section-confirmacao");
   const tabelaCorpo = document.getElementById("tabela-corpo");
   const tabelaConfirmacao = document.getElementById("tabela-confirmacao");
+  
+  // Elementos do popup
+  const popupRepetir = document.getElementById("popup-repetir");
+  const popupVoltar = document.getElementById("popup-voltar");
+  const popupAvancar = document.getElementById("popup-avancar");
 
   // Botões
   const btnPrevMonth = document.getElementById("prev-month");
@@ -275,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==============================
   // Botão: Repetir mesma matéria e horários
   // ==============================
-  btnRepetirAulas.addEventListener("click", () => {
+  function repetirAulas() {
     const allCards = document.querySelectorAll(".selection-card");
     if (allCards.length === 0) {
       alert("Adicione pelo menos uma aula para usar esta função.");
@@ -326,6 +331,35 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     );
+  }
+
+  // Evento para abrir popup de confirmação
+  btnRepetirAulas.addEventListener("click", () => {
+    popupRepetir.style.display = "flex";
+    gsap.fromTo(popupRepetir, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+  });
+
+  // Evento para fechar popup (voltar)
+  popupVoltar.addEventListener("click", () => {
+    gsap.to(popupRepetir, { 
+      opacity: 0, 
+      duration: 0.3,
+      onComplete: () => {
+        popupRepetir.style.display = "none";
+      }
+    });
+  });
+
+  // Evento para confirmar e executar função (avançar)
+  popupAvancar.addEventListener("click", () => {
+    gsap.to(popupRepetir, { 
+      opacity: 0, 
+      duration: 0.3,
+      onComplete: () => {
+        popupRepetir.style.display = "none";
+        repetirAulas();
+      }
+    });
   });
 
   // ==============================
