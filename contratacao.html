@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendário e Seleção</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="contratacao.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Adicionado html2canvas para capturar a tabela como imagem -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <!-- Section: Seleção de Dias de Aula -->
+  <section id="section-selecao" class="section-page">
+    <h1>Selecione os dias de aula</h1>
+
+    <div class="main-container" id="main-container">
+      
+      <!-- Seção: Calendário -->
+      <div class="calendar-section" id="calendar-section">
+        <div class="calendar-header">
+          <span class="arrow" id="prev-month">❮</span>
+          <span id="month-year"></span>
+          <span class="arrow" id="next-month">❯</span>
+        </div>
+        <div class="calendar-weekdays">
+          <div>DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div>SÁB</div>
+        </div>
+        <div class="calendar-days" id="calendar-days"></div>
+      </div>
+
+      <!-- Container da Direita -->
+      <div class="right-container">
+        <!-- Total de Horas -->
+        <div class="total-hours-card" id="total-hours-card">
+          Total de horas: 0h00
+        </div>
+
+        <!-- Seleção -->
+        <div class="selection-section" id="selection-section">
+          <h2>Seleções de Aula</h2>
+          <div id="selection-cards-container"></div>
+          <p>Para adicionar mais uma aula, clique em uma nova data no calendário</p>
+          <!-- Novo botão para repetir aulas -->
+          <button id="btn-repetir-aulas" class="action-btn">Repetir mesma matéria e horários nos demais dias de aula</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões Rodapé - Seleção -->
+    <div class="footer-buttons" id="footer-buttons">
+      <button id="btn-voltar">Voltar</button>
+      <button id="btn-avancar">Avançar</button>
+    </div>
+  </section>
+
+  <!-- Section: Confirmação -->
+  <section id="section-confirmacao" class="section-page" style="display: none;">
+    <h1>Confira abaixo os detalhes das suas aulas selecionadas:</h1>
+
+    <div class="table-container">
+      <table id="tabela-confirmacao">
+        <thead>
+          <tr>
+            <th colspan="5" class="table-title">Cronograma de Aulas</th>
+          </tr>
+          <tr>
+            <th>Data</th>
+            <th>Hora de Início</th>
+            <th>Duração</th>
+            <th>Matéria</th>
+            <th>Professor</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-corpo">
+          <!-- Linhas geradas dinamicamente -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Botões Rodapé - Confirmação -->
+    <div class="footer-buttons" id="footer-buttons-confirmacao">
+      <button id="btn-editar">Editar dias de aula</button>
+      <!-- Botão "Avançar" renomeado para "Enviar Cronograma" -->
+      <button id="btn-enviar-cronograma">Enviar Cronograma</button>
+      <!-- Novo botão para baixar a tabela como imagem -->
+      <button id="btn-baixar-cronograma" class="action-btn">Baixar Cronograma</button>
+    </div>
+  </section>
+
+  <script src="contratacao.js"></script>
+</body>
+</html>

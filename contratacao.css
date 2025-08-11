@@ -1,0 +1,451 @@
+/* ============================================================
+   CSS - Projeto: Calendário, Seleção e Confirmação de Aulas
+   ============================================================ */
+
+/* Definindo variáveis CSS para cores, tamanhos e outros */
+:root {
+  --primary-color: #f28705 !important;
+  --text-color: #333 !important;
+  --bg-color: #f9f9f9 !important;
+  --border-color: #ddd !important;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+  --radius: 16px !important;
+  --day-circle-size: 70px !important;
+  --section-height: 70vh !important;
+}
+
+/* Resetando margens, paddings e configurando box-sizing */
+* {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Estilizando o body com layout centralizado */
+body {
+  font-family: 'Montserrat', sans-serif !important;
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  min-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 20px !important;
+  position: relative !important; /* Contexto para posicionamento fixo */
+}
+
+/* Estilizando o título principal */
+h1 {
+  margin-bottom: 20px !important;
+  color: var(--primary-color) !important;
+  text-align: center !important;
+}
+
+/* Configurando a seção principal */
+.section-page {
+  width: 100% !important;
+  max-width: 1000px !important;
+  margin-bottom: 100px !important; /* Espaço para botões fixos */
+}
+
+/* Layout principal com flexbox */
+.main-container {
+  width: 100% !important;
+  display: flex !important;
+  gap: 20px !important;
+  align-items: stretch !important;
+}
+
+/* Estilizando a seção do calendário */
+.calendar-section {
+  flex: 0 0 55% !important;
+  height: var(--section-height) !important;
+  padding: 16px !important;
+  background-color: white !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Container da direita com seleção e total de horas */
+.right-container {
+  flex: 0 0 45% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+  height: var(--section-height) !important;
+}
+
+/* Estilizando o card de total de horas */
+.total-hours-card {
+  background-color: white !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+  padding: 12px !important;
+  font-weight: bold !important;
+  color: var(--primary-color) !important;
+  font-size: 1.1rem !important;
+  text-align: center !important;
+}
+
+/* Estilizando a seção de seleção de aulas */
+.selection-section {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 16px !important;
+  background-color: white !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+}
+
+/* Título da seção de seleção */
+.selection-section h2 {
+  font-size: 1.2rem !important;
+  margin-bottom: 12px !important;
+  color: var(--primary-color) !important;
+}
+
+/* Container dos cards de seleção com scroll */
+#selection-cards-container {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  padding-right: 8px !important;
+  min-height: 0 !important;
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--primary-color) #f1f1f1 !important;
+}
+
+/* Estilizando cada card de seleção */
+.selection-card {
+  background-color: white !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+  padding: 12px 16px !important;
+  margin-bottom: 12px !important;
+  border: 1px solid transparent !important;
+  transition: 0.3s !important;
+}
+
+/* Hover nos cards de seleção */
+.selection-card:hover {
+  border: 1px solid var(--primary-color) !important;
+}
+
+/* Estilizando inputs e selects nos cards */
+.selection-card select,
+.selection-card input[type="time"] {
+  width: 100% !important;
+  padding: 8px 12px !important;
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--border-color) !important;
+  font-family: 'Montserrat', sans-serif !important;
+  background-color: white !important;
+  box-shadow: var(--shadow) !important;
+  margin-top: 4px !important;
+  font-size: 0.85rem !important;
+}
+
+/* Foco nos inputs e selects */
+.selection-card select:focus,
+.selection-card input[type="time"]:focus {
+  outline: none !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 4px 12px rgba(242, 135, 5, 0.2) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Estilizando botão de deletar */
+.delete-btn {
+  margin-top: 12px !important;
+  padding: 8px !important;
+  background-color: white !important;
+  color: #e74c3c !important;
+  font-weight: bold !important;
+  border-radius: var(--radius) !important;
+  border: 1px solid #e74c3c !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  text-align: center !important;
+  font-size: 0.85rem !important;
+  transition: all 0.3s !important;
+}
+
+/* Hover no botão de deletar */
+.delete-btn:hover {
+  background-color: #e74c3c !important;
+  color: white !important;
+}
+
+/* Estilizando o novo botão de ação (repetir aulas, baixar cronograma) */
+.action-btn {
+  margin-top: 12px !important;
+  padding: 10px !important;
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: var(--radius) !important;
+  border: 2px solid var(--primary-color) !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  text-align: center !important;
+  font-size: 0.9rem !important;
+  transition: all 0.3s !important;
+}
+
+.action-btn:hover {
+  background-color: #e07d04 !important;
+  border-color: #e07d04 !important;
+}
+
+/* Cabeçalho do calendário */
+.calendar-header {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 16px !important;
+  font-weight: bold !important;
+  color: var(--primary-color) !important;
+  margin-bottom: 12px !important;
+}
+
+/* Estilizando setas de navegação */
+.arrow {
+  cursor: pointer !important;
+  font-size: 1.4rem !important;
+}
+
+/* Dias da semana no calendário */
+.calendar-weekdays {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  font-weight: bold !important;
+  color: #555 !important;
+  margin-bottom: 8px !important;
+  font-size: 0.9rem !important;
+}
+
+/* Grid dos dias no calendário */
+.calendar-days {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  gap: 4px !important;
+  flex-grow: 1 !important;
+  grid-auto-rows: minmax(30px, auto) !important;
+  overflow-y: auto !important;
+  padding-right: 4px !important;
+}
+
+/* Estilizando cada dia no calendário */
+.calendar-days div {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  transition: 0.3s !important;
+  width: var(--day-circle-size) !important;
+  height: var(--day-circle-size) !important;
+  margin: 0 auto !important;
+  font-size: 1.5rem !important;
+}
+
+/* Estilizando o dia atual */
+.calendar-days .today {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  transform: scale(1.05) !important;
+}
+
+/* Hover nos dias clicáveis */
+.calendar-days div:not(.past-day):hover {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  transform: scale(1.05) !important;
+}
+
+/* Estilizando dia selecionado */
+.selected-day {
+  border: 2px solid var(--primary-color) !important;
+  box-shadow: 0 0 8px rgba(242, 135, 5, 0.5) !important;
+}
+
+/* Estilizando dias passados */
+.past-day {
+  color: #999 !important;
+  background-color: #f0f0f0 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+/* Estilizando botões fixos (para TODAS as seções) */
+.footer-buttons,
+#footer-buttons-confirmacao {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 100% !important;
+  max-width: 600px !important;
+  display: flex !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  z-index: 1000 !important;
+  padding: 0 20px !important;
+}
+
+/* Ajustando a seção de confirmação para alinhar botões na base */
+#section-confirmacao {
+  position: relative !important;
+  min-height: calc(100vh - 120px) !important; /* Garante espaço suficiente */
+  padding-bottom: 100px !important; /* Ajuste para empurrar conteúdo acima dos botões fixos */
+  margin-bottom: 0 !important; /* Remove margem extra */
+}
+
+/* Ajuste para que os botões de confirmação também fiquem fixos no rodapé */
+#footer-buttons-confirmacao {
+  bottom: 20px !important; /* Ajustado para o mesmo valor dos outros botões fixos */
+}
+
+/* Estilizando todos os botões fixos */
+.footer-buttons button,
+#footer-buttons-confirmacao button {
+  flex: 1 !important;
+  padding: 12px !important;
+  border-radius: var(--radius) !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  border: 2px solid var(--primary-color) !important;
+  font-size: 0.9rem !important;
+  transition: all 0.3s !important;
+}
+
+/* Estilizando botões Voltar e Editar */
+#btn-voltar,
+#btn-editar {
+  background-color: white !important;
+  color: var(--primary-color) !important;
+}
+
+/* Hover nos botões Voltar e Editar */
+#btn-voltar:hover,
+#btn-editar:hover {
+  background-color: #f5f5f5 !important;
+}
+
+/* Estilizando botões Avançar e Enviar Cronograma */
+#btn-avancar,
+#btn-enviar-cronograma { /* Alterado de #btn-avancar-confirmacao para #btn-enviar-cronograma */
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* Hover nos botões Avançar e Enviar Cronograma */
+#btn-avancar:hover,
+#btn-enviar-cronograma:hover { /* Alterado de #btn-avancar-confirmacao para #btn-enviar-cronograma */
+  background-color: #e07d04 !important;
+}
+
+/* Estilizando container da tabela de confirmação */
+.table-container {
+  width: 100% !important;
+  overflow-x: auto !important;
+  margin-top: 20px !important;
+  margin-bottom: 80px !important; /* Espaço para os botões fixos */
+}
+
+/* Estilizando a tabela de confirmação */
+#tabela-confirmacao {
+  width: 100% !important;
+  border: 5px solid var(--primary-color) !important;
+  border-radius: var(--radius) !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+/* Estilizando células da tabela */
+#tabela-confirmacao th,
+#tabela-confirmacao td {
+  border: 1px solid var(--primary-color) !important;
+  padding: 10px !important;
+  text-align: center !important;
+}
+
+/* Estilizando título da tabela */
+#tabela-confirmacao .table-title {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 1.1rem !important;
+  text-transform: uppercase !important;
+}
+
+/* Estilizando cabeçalho secundário da tabela */
+#tabela-confirmacao thead tr:nth-child(2) th {
+  background-color: #555 !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+/* Responsividade para dispositivos menores */
+@media (max-width: 768px) {
+  body {
+    padding: 15px !important;
+    justify-content: flex-start !important;
+    padding-bottom: 100px !important; /* Mantém espaço para botões fixos */
+  }
+
+  .main-container {
+    flex-direction: column !important;
+    width: 90% !important;
+    gap: 15px !important;
+  }
+
+  .calendar-section,
+  .right-container {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    /* Removido height: auto para permitir max-height */
+  }
+
+  /* Ajuste para o calendário em mobile */
+  .calendar-section {
+    max-height: 40vh !important; /* Ocupa 40% da altura da tela vertical */
+    overflow-y: auto !important; /* Permite rolagem se o conteúdo exceder */
+  }
+
+  /* Botões fixos no rodapé em mobile */
+  .footer-buttons,
+  #footer-buttons-confirmacao {
+    position: fixed !important; /* Mantém fixo */
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 100% !important;
+    max-width: 100% !important; /* Ocupa toda a largura disponível */
+    margin-top: 0 !important; /* Remove margem superior */
+    background-color: transparent !important; /* Fundo transparente */
+    box-shadow: none !important; /* Sem sombra */
+    padding: 0 15px !important; /* Ajusta padding para mobile */
+  }
+
+  #section-confirmacao {
+    min-height: auto !important;
+    padding-bottom: 0 !important;
+  }
+
+  .section-page {
+    margin-bottom: 20px !important;
+  }
+
+  .table-container {
+    margin-bottom: 20px !important;
+  }
+}
