@@ -131,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <option value="Matemática">Matemática</option>
         <option value="Química">Química</option>
         <option value="Sociologia">Sociologia</option>
+        <option value="Sociologia">Pedagogia</option>
       </select>
 
       <label>Horário:</label>
