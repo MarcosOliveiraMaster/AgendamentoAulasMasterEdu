@@ -1,7 +1,8 @@
 /* ============================================================
    CSS - Projeto: Calendário, Seleção e Confirmação de Aulas
-   Versão: 2.0
+   Versão: 2.1
    Atualizações: 
+   - Calendário mobile sem scroll (mostra todos os dias)
    - Melhorias de responsividade mobile
    - Ajustes para compartilhamento no WhatsApp
    - Botões fixos otimizados
@@ -51,7 +52,7 @@ h1 {
 
 /* Configurando a seção principal */
 .section-page {
-  width: 100% !important;
+  width: 100 !important;
   max-width: 1000px !important;
   margin-bottom: 100px !important;
 }
@@ -253,8 +254,6 @@ h1 {
   gap: 4px !important;
   flex-grow: 1 !important;
   grid-auto-rows: minmax(30px, auto) !important;
-  overflow-y: auto !important;
-  padding-right: 4px !important;
 }
 
 /* Estilizando cada dia no calendário */
@@ -432,25 +431,39 @@ h1 {
     gap: 15px !important;
   }
 
-  .calendar-section,
-  .right-container {
+  .calendar-section {
     flex: 1 1 100% !important;
     width: 100% !important;
     height: auto !important;
-  }
-
-  .calendar-section {
-    max-height: 40vh !important;
-    overflow-y: auto !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    padding: 10px !important;
     margin-bottom: 15px !important;
   }
 
   .right-container {
-    flex: 1 !important;
+    flex: 1 1 100% !important;
+    width: 100% !important;
     min-height: 50vh !important;
     overflow: hidden !important;
     display: flex !important;
     flex-direction: column !important;
+  }
+
+  .calendar-days {
+    grid-auto-rows: 1fr !important;
+    gap: 2px !important;
+  }
+
+  .calendar-days div {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1rem !important;
+  }
+
+  .calendar-weekdays div {
+    font-size: 0.7rem !important;
+    padding: 5px 0 !important;
   }
 
   .selection-section {
@@ -513,9 +526,13 @@ h1 {
 /* Melhorias para telas muito pequenas */
 @media (max-width: 480px) {
   .calendar-days div {
-    width: 50px !important;
-    height: 50px !important;
-    font-size: 1.2rem !important;
+    width: 35px !important;
+    height: 35px !important;
+    font-size: 0.9rem !important;
+  }
+
+  .calendar-header {
+    font-size: 0.9rem !important;
   }
 
   .selection-card {
